@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Academic Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1612;
+      --rust: #b85c38;
+      --sage: #6b7c5e;
+      --gold: #c9a84c;
+      --light: #ede8df;
+      --muted: #7a736a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      background: var(--ink);
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(185,92,56,.25) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(107,124,94,.2) 0%, transparent 60%);
+    }
+
+    header::after {
+      content: '§';
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(200px, 35vw, 500px);
+      color: rgba(255,255,255,.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .header-inner { position: relative; z-index: 1; }
+
+    .eyebrow {
+      font-size: .75rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .8s .2s forwards;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      color: #fff;
+      line-height: 1.05;
+      opacity: 0;
+      animation: fadeUp .8s .4s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .subtitle {
+      margin-top: 1.5rem;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,.5);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      animation: fadeUp .8s .6s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      color: rgba(255,255,255,.3);
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp .8s 1s forwards;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.3), transparent);
+      animation: scrollLine 1.5s 1.5s infinite;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(245,240,232,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(26,22,18,.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .nav-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+    }
+
+    .nav-links { display: flex; gap: 2rem; }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .85rem;
+      letter-spacing: .05em;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--rust); }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 3.5rem;
+      font-size: 1.05rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .about-decoration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .monogram {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .monogram::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(26,22,18,.2);
+      animation: spin 20s linear infinite;
+    }
+
+    /* ── ASSIGNMENTS GRID ── */
+    .assignments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid rgba(26,22,18,.08);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      cursor: default;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 0;
+      background: var(--rust);
+      transition: height .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(26,22,18,.1);
+      border-color: rgba(26,22,18,.15);
+    }
+
+    .card:hover::before { height: 100%; }
+
+    .card-subject {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: .75rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: .75rem;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-date {
+      font-size: .75rem;
+      color: rgba(122,115,106,.6);
+    }
+
+    .card-tag {
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .75rem;
+      border-radius: 2px;
+      background: var(--light);
+      color: var(--muted);
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      text-decoration: none;
+      font-size: .8rem;
+      color: var(--rust);
+      font-weight: 500;
+      letter-spacing: .03em;
+      transition: gap .2s;
+    }
+
+    .card-link:hover { gap: .7rem; }
+
+    /* ── ADD ASSIGNMENT BUTTON ── */
+    .add-card {
+      border: 2px dashed rgba(26,22,18,.15);
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      min-height: 200px;
+      cursor: pointer;
+      transition: border-color .3s, background .3s;
+      border-radius: 4px;
+    }
+
+    .add-card:hover {
+      border-color: var(--rust);
+      background: rgba(184,92,56,.03);
+    }
+
+    .add-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--muted);
+      transition: background .3s, color .3s;
+    }
+
+    .add-card:hover .add-icon {
+      background: var(--rust);
+      color: #fff;
+    }
+
+    .add-text {
+      font-size: .85rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,22,18,.7);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--cream);
+      border-radius: 6px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      transform: translateY(20px);
+      transition: transform .3s;
+    }
+
+    .modal-overlay.open .modal { transform: none; }
+
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 1px solid rgba(26,22,18,.15);
+      border-radius: 3px;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      color: var(--ink);
+      transition: border-color .2s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--rust);
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.75rem;
+    }
+
+    .btn {
+      padding: .75rem 1.75rem;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 500;
+      transition: opacity .2s, transform .1s;
+    }
+
+    .btn:active { transform: scale(.98); }
+
+    .btn-primary {
+      background: var(--ink);
+      color: #fff;
+      flex: 1;
+    }
+
+    .btn-primary:hover { opacity: .85; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(26,22,18,.15);
+    }
+
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      background: var(--ink);
+      max-width: 100%;
+      padding: 6rem 2rem;
+    }
+
+    #contact .section-label { color: var(--gold); }
+
+    #contact .section-title { color: #fff; }
+
+    #contact p { color: rgba(255,255,255,.45); max-width: 480px; margin: 1rem auto 2.5rem; }
+
+    .contact-email {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201,168,76,.3);
+      padding-bottom: .2rem;
+      transition: border-color .2s;
+    }
+
+    .contact-email:hover { border-color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(26,22,18,.08);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-decoration { display: none; }
+      .nav-links { display: none; }
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state p { font-size: 1.05rem; }
+
+    /* delete btn */
+    .card-del {
+      position: absolute;
+      top: .75rem; right: .75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: opacity .2s, color .2s;
+      line-height: 1;
+      padding: .2rem .35rem;
+    }
+
+    .card:hover .card-del { opacity: 1; }
+    .card-del:hover { color: var(--rust); }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<header>
+  <div class="header-inner">
+    <p class="eyebrow">Academic Portfolio</p>
+    <h1>Your <em>Name</em><br>Here</h1>
+    <p class="subtitle">A curated collection of academic work, assignments, and projects.</p>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</header>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <span class="nav-name">Rougy Rucogoza</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#assignments">Assignments</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+  <div class="about-text">
+    <p class="section-label">About Me</p>
+    <h2 class="section-title">Student &amp;<br><em>Lifelong Learner</em></h2>
+    <p>
+      Hi! I'm <strong>Rougy Rucogoza</strong>, a student at <strong>Seneca Polytechnic</strong>.
+      This portfolio showcases the assignments and projects I've completed throughout my academic journey.
+    </p>
+    <p>
+      I'm passionate about <strong>cooking here</strong>. Feel free to explore my work and reach out if you'd like to connect!
+    </p>
+  </div>
+  <div class="about-decoration">
+    <div class="monogram">RR</div>
+  </div>
+</section>
+
+<!-- ══ ASSIGNMENTS ══ -->
+<section id="assignments">
+  <p class="section-label">Academic Work</p>
+  <h2 class="section-title">My Assignments</h2>
+  <p class="section-intro">Click "Add Assignment" to showcase your work. Each card can link to a Google Doc, PDF, or any URL.</p>
+
+  <div class="assignments-grid" id="grid">
+    <!-- Cards render here via JS -->
+
+    <div class="add-card" id="addBtn">
+      <div class="add-icon">＋</div>
+      <div class="add-text">Add an Assignment<br><span style="font-size:.75rem;opacity:.6">Click to add your work</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <p class="section-label">Get in Touch</p>
+  <h2 class="section-title">Say Hello</h2>
+  <p>Interested in my work or want to connect? Feel free to reach out anytime.</p>
+  <a href="mailto:rougy.rucogoza@gmail.com class="contact-email">rougyrucogoza@gmail.com</a>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <p>© <span id="year"></span> Rougy Rucogoza · Built with ♡ and GitHub Pages</p>
+</footer>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Add Assignment</h2>
+
+    <div class="form-group">
+      <label>Assignment Title *</label>
+      <input type="text" id="fTitle" placeholder="e.g. Research Essay on Climate Change"/>
+    </div>
+
+    <div class="form-group">
+      <label>Subject / Course</label>
+      <input type="text" id="fSubject" placeholder="e.g. Environmental Science"/>
+    </div>
+
+    <div class="form-group">
+      <label>Short Description</label>
+      <textarea id="fDesc" placeholder="A brief summary of what this assignment covers…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Link (Google Doc, PDF URL, etc.)</label>
+      <input type="url" id="fLink" placeholder="https://docs.google.com/…"/>
+    </div>
+
+    <div class="form-group">
+      <label>Date Completed</label>
+      <input type="month" id="fDate"/>
+    </div>
+
+    <div class="form-group">
+      <label>Tag / Type</label>
+      <select id="fTag">
+        <option value="Essay">Essay</option>
+        <option value="Report">Report</option>
+        <option value="Project">Project</option>
+        <option value="Presentation">Presentation</option>
+        <option value="Lab">Lab</option>
+        <option value="Code">Code</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn">Save Assignment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── State ──
+  const STORAGE_KEY = 'portfolio_assignments';
+  let assignments = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+  // ── Render ──
+  function render() {
+    const grid = document.getElementById('grid');
+    // Remove all cards (keep addBtn)
+    grid.querySelectorAll('.card').forEach(c => c.remove());
+
+    if (assignments.length === 0) {
+      // hint already visible from add button
+    }
+
+    assignments.forEach((a, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const dateStr = a.date ? new Date(a.date + '-01').toLocaleDateString('en-US', { year:'numeric', month:'long' }) : '';
+
+      card.innerHTML = `
+        <button class="card-del" data-i="${i}" title="Remove">✕</button>
+        <p class="card-subject">${esc(a.subject)}</p>
+        <h3 class="card-title">${esc(a.title)}</h3>
+        <p class="card-desc">${esc(a.desc)}</p>
+        <div class="card-footer">
+          <span class="card-date">${dateStr}</span>
+          ${ a.link
+            ? `<a class="card-link" href="${esc(a.link)}" target="_blank" rel="noopener">View →</a>`
+            : `<span class="card-tag">${esc(a.tag)}</span>`
+          }
+        </div>
+        ${ a.link ? `<div style="margin-top:.75rem"><span class="card-tag">${esc(a.tag)}</span></div>` : '' }
+      `;
+
+      grid.insertBefore(card, document.getElementById('addBtn'));
+    });
+
+    // Delete listeners
+    grid.querySelectorAll('.card-del').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const i = parseInt(e.currentTarget.dataset.i);
+        assignments.splice(i, 1);
+        save();
+        render();
+      });
+    });
+  }
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(assignments));
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Modal ──
+  const overlay = document.getElementById('modalOverlay');
+
+  document.getElementById('addBtn').addEventListener('click', () => {
+    overlay.classList.add('open');
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', () => {
+    overlay.classList.remove('open');
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const title = document.getElementById('fTitle').value.trim();
+    if (!title) { alert('Please enter an assignment title.'); return; }
+
+    assignments.unshift({
+      title,
+      subject: document.getElementById('fSubject').value.trim(),
+      desc: document.getElementById('fDesc').value.trim(),
+      link: document.getElementById('fLink').value.trim(),
+      date: document.getElementById('fDate').value,
+      tag: document.getElementById('fTag').value,
+    });
+
+    save();
+    render();
+    overlay.classList.remove('open');
+
+    // reset form
+    ['fTitle','fSubject','fDesc','fLink','fDate'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fTag').value = 'Essay';
+  });
+
+  // ── Init ──
+  render();
+</script>
+</body>
+</html>
